@@ -1,0 +1,2 @@
+openrelik-api-client==0.2.3
+google-cloud-storage==3.1.0

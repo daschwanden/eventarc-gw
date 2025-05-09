@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventarc-gw
+  namespace: default
+  labels:
+    app: eventarc-gw
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventarc-gw
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: eventarc-gw
+    spec:
+      containers:
+      - name: hello
+        image: https://github.com/daschwanden/eventarc-gw.git/eventarc-gw:latest
+        imagePullPolicy: Always
+        env:
+        - name: OPENRELIK_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: openrelik-api-key
+              key: api-key
+      restartPolicy: Always

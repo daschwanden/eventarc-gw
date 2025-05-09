@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: eventarc-gw
+  labels:
+    app: eventarc-gw
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app: eventarc-gw
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  sessionAffinity: None

@@ -26,6 +26,8 @@ spec:
         image: ghcr.io/daschwanden/eventarc-gw:latest
         imagePullPolicy: Always
         env:
+        - name: OPENRELIK_API_SERVER_URL
+          value: "http://my-release-openrelik-api:8710"
         - name: OPENRELIK_API_KEY
           valueFrom:
             secretKeyRef:

@@ -135,7 +135,7 @@ class S(BaseHTTPRequestHandler):
 
                     try:
                         # Create the API client. It will handle token refreshes automatically.
-                        api_server_url = "http://my-release-openrelik-api:8710"
+                        api_server_url = os.getenv("OPENRELIK_API_SERVER_URL")
                         # Get the OpenRelik API key from environment variable
                         api_key = os.getenv("OPENRELIK_API_KEY")
                         api_client = APIClientGCS(api_server_url, api_key)

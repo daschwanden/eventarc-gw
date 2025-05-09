@@ -5,8 +5,8 @@ This repo contains an event driven blueprint for how to upload objects from [Goo
 ## Before you begin
 This blueprint assumes that you have a Google Cloud Project with billing enabled and with the following resources set up:
 1. GKE Cluster with [Workload Identity Federation for GKE](https://cloud.google.com/eventarc/standard/docs/gke/route-trigger-cloud-storage#workload-identity) enabled
-2. [OpenRelik](https://openrelik.org) installed on your GKE Cluster
-3. Deploy the eventarc-gw Deployment and Service
+2. [OpenRelik](https://openrelik.org) installed on the GKE Cluster
+3. eventarc-gw Deployment and Service deployed on the GKE Cluster
 4. GCS Bucket
 5. Eventarc Trigger [Cloud Storage Events](https://cloud.google.com/eventarc/standard/docs/gke/route-trigger-cloud-storage)
 
@@ -38,7 +38,7 @@ gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${CLUSTER_LOCAT
 ## 2. OpenRelik
 
 ### 2.1. Install OpenRelik
-The easiest way to install [OpenRelik](https://openrelik.org) on GKE is to apply the Helm Chart available from the [OSDFIR Infrastructure](https://github.com/google/osdifir-infrastructure) repository
+The easiest way to install [OpenRelik](https://openrelik.org) on GKE is to apply the Helm Chart available from the [OSDFIR Infrastructure](https://github.com/google/osdifir-infrastructure) repository.
 
 Add the repo containing the Helm charts as follows:
 ```console
@@ -53,7 +53,7 @@ helm install my-release osdfir-charts/osdfir-infrastructure
 ### 2.2. Configure OpenRelik
 
 > [!NOTE]
-> You will also need an ```admin``` user to access OpenRelik. Create one using the following command
+> You will also need an ```admin``` user to access OpenRelik. Create the user with the following commands:
 > 
 ```console
 # Get a terminal in the OpenRelik API Pod
@@ -65,16 +65,17 @@ password=$(LC_ALL=C tr -dc 'A-Za-z0-9@%*+,-./' < /dev/urandom 2>/dev/null | head
 # IMPORTANT -> TAKE NOTE OF THIS, you will need it to access OpenRelik in the next steps
 echo $password
 
+# Create the admin user
 python admin.py create-user admin --password "$password" --admin 1>/dev/null
 
-# Once the user is created you can exit this shell.
+# Once the user is created you can exit the terminal.
 ```
 
 ### 2.3. Access OpenRelik
 
 OpenRelik is not exposed externally on the GKE Cluster.
 
-For the purpose of this blueprint you can run the following commands from two seperate ```terminals``` on your local machine.
+For the purpose of this blueprint you can leverage port-forwarding by running the following commands from two seperate ```terminals``` on your local machine.
 
 ```console
 kubectl port-forward service/my-release-openrelik-api 8710:8710 --address='0.0.0.0'
@@ -156,7 +157,7 @@ Create a GCS Bucket
 gcloud storage buckets create gs://${GCS_BUCKET}
 
 # Add a label with the OpenRelik folder_id created above 
-gcloud storage buckets update gs://${GCS_BUCKET} --update-labels=folder_ID=${OPENRELIK_FOLDER_ID}
+gcloud storage buckets update gs://${GCS_BUCKET} --update-labels=folder_id=${OPENRELIK_FOLDER_ID}
 
 # Add a label with the OpenRelik reusable workflow template_id created above 
 gcloud storage buckets update gs://${GCS_BUCKET} --update-labels=template_id=${OPENRELIK_WORKFLOW_TEMPLATE_ID}

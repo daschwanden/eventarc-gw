@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: hello
-        image: https://github.com/daschwanden/eventarc-gw.git/eventarc-gw:latest
+        image: ghcr.io/daschwanden/eventarc-gw:latest
         imagePullPolicy: Always
         env:
         - name: OPENRELIK_API_KEY
